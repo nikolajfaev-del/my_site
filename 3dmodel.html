@@ -2,335 +2,349 @@
 <html>
 <head>
   <meta charset="utf-8"/>
-  <title>Aura of Safety — MVP Sensor Prototype</title>
+  <title>Prototype Sensor Model — Babylon.js (fixed)</title>
   <style>
-    html, body { width:100%; height:100%; margin:0; padding:0; overflow:hidden; background:#eef0f2; }
+    html, body { width:100%; height:100%; margin:0; padding:0; overflow:hidden; background:#f3f5f7; }
     #renderCanvas { width:100%; height:100%; touch-action:none; display:block; }
-    .hint { position: absolute; left: 12px; top: 12px; font-family: Arial, Helvetica, sans-serif; color: #222; background: rgba(255,255,255,0.8); padding:8px 10px; border-radius:8px; font-size:13px; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
-    .back-button { position: absolute; left: 12px; bottom: 12px; font-family: Arial, Helvetica, sans-serif; color: #222; background: rgba(255,255,255,0.9); padding:10px 16px; border-radius:8px; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.08); text-decoration: none; display: inline-block; transition: background 0.3s; }
-    .back-button:hover { background: rgba(255,255,255,1); }
+    .hint { position: absolute; left: 12px; top: 12px; font-family: Arial, Helvetica, sans-serif; color: #333; background: rgba(255,255,255,0.7); padding:6px 8px; border-radius:6px; font-size:13px; }
   </style>
 
-  <!-- Babylon.js -->
+  <!-- Babylon.js CDN -->
   <script src="https://cdn.babylonjs.com/babylon.js"></script>
   <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
   <script src="https://cdn.babylonjs.com/csg/babylon.csg.js"></script>
 </head>
 <body>
-  <div class="hint">Drag to rotate · Scroll to zoom · Double-click to reset</div>
-  <a href="index.html" class="back-button">← Назад на главную</a>
+  <div class="hint">Drag to rotate • Scroll to zoom • Double-click to reset</div>
   <canvas id="renderCanvas"></canvas>
 
 <script>
   const canvas = document.getElementById("renderCanvas");
-  const engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
+  const engine = new BABYLON.Engine(canvas, true, {preserveDrawingBuffer:true, stencil:true});
 
-  const createScene = () => {
+  const createScene = function() {
     const scene = new BABYLON.Scene(engine);
-    scene.clearColor = new BABYLON.Color4(0.94,0.95,0.96,1);
+    scene.clearColor = new BABYLON.Color4(0.96,0.97,0.98,1);
 
-    // Camera
-    const cam = new BABYLON.ArcRotateCamera("cam", -Math.PI/2.6, Math.PI/3.6, 1.8, BABYLON.Vector3.Zero(), scene);
-    cam.attachControl(canvas, true);
-    cam.wheelDeltaPercentage = 0.01;
-    cam.lowerRadiusLimit = 0.4;
-    cam.upperRadiusLimit = 4;
-    cam.minZ = 0.01;
+    // === CAMERA ===
+    const camera = new BABYLON.ArcRotateCamera("cam", -Math.PI/2.8, Math.PI/3.5, 1.8, BABYLON.Vector3.Zero(), scene);
+    camera.attachControl(canvas, true);
+    camera.wheelDeltaPercentage = 0.01;
+    camera.lowerRadiusLimit = 0.4;
+    camera.upperRadiusLimit = 4;
+    camera.minZ = 0.01;
 
-    // Lights
+    // === LIGHTS ===
     const hemi = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0,1,0), scene);
     hemi.intensity = 0.9;
-    const dir = new BABYLON.DirectionalLight("dir", new BABYLON.Vector3(-0.7,-1,0.1), scene);
-    dir.position = new BABYLON.Vector3(5, 6, -4);
-    dir.intensity = 1.2;
+    const dir = new BABYLON.DirectionalLight("dir", new BABYLON.Vector3(-0.6,-1,0.2), scene);
+    dir.position = new BABYLON.Vector3(5, 5, -5);
+    dir.intensity = 1.0;
 
-    // Ground/environment
-    const env = scene.createDefaultEnvironment({ createSkybox:false, createGround:true, enableGroundShadow:false });
+    // === GROUND ENVIRONMENT ===
+    const env = scene.createDefaultEnvironment({
+      createSkybox: false,
+      createGround: true,
+      enableGroundShadow: false
+    });
     env.ground.position.y = -0.9;
-    env.ground.scaling = new BABYLON.Vector3(2.5,1,2.5);
+    env.ground.scaling = new BABYLON.Vector3(2.5, 1, 2.5);
     env.ground.material.diffuseColor = new BABYLON.Color3(0.98,0.98,0.99);
 
-    // Materials
+    // === MATERIALS ===
     const bodyMat = new BABYLON.PBRMaterial("bodyMat", scene);
     bodyMat.albedoColor = new BABYLON.Color3(0.96,0.96,0.96);
-    bodyMat.roughness = 0.45;
-    bodyMat.metallic = 0.06;
-    bodyMat.reflectivityColor = new BABYLON.Color3(0.03,0.03,0.03);
+    bodyMat.roughness = 0.6;
+    bodyMat.metallic = 0.05;
 
-    const rimMat = new BABYLON.StandardMaterial("rimMat", scene);
-    rimMat.diffuseColor = new BABYLON.Color3(0.94,0.94,0.94);
+    const bottomMat = new BABYLON.PBRMaterial("bottomMat", scene);
+    bottomMat.albedoColor = new BABYLON.Color3(0.7, 0.95, 0.9);
+    bottomMat.roughness = 0.4;
+    bottomMat.metallic = 0.0;
 
-    const ventMat = new BABYLON.StandardMaterial("ventMat", scene);
-    ventMat.diffuseColor = new BABYLON.Color3(0.18,0.20,0.22);
+    const ventMat = new BABYLON.StandardMaterial("vent", scene);
+    ventMat.diffuseColor = new BABYLON.Color3(0.13,0.16,0.2);
 
     const portMat = new BABYLON.StandardMaterial("portMat", scene);
-    portMat.diffuseColor = new BABYLON.Color3(0.06,0.06,0.06);
-    portMat.specularColor = new BABYLON.Color3(0.2,0.2,0.2);
+    portMat.diffuseColor = new BABYLON.Color3(0.08,0.08,0.08);
 
-    const buttonMat = new BABYLON.PBRMaterial("buttonMat", scene);
-    buttonMat.albedoColor = new BABYLON.Color3(0.12,0.55,0.95); // bluish switch color (can be toggled)
-    buttonMat.roughness = 0.2;
-    buttonMat.metallic = 0.05;
+    // === ROOT (create early) ===
+    const root = new BABYLON.TransformNode("deviceRoot", scene);
 
-    // Root node
-    const root = new BABYLON.TransformNode("root", scene);
-
-    // Dimensions
+    // === MAIN BODY ===
     const bodyRadius = 0.42;
     const bodyHeight = 0.16;
-
-    // Main (lower) flattened cylinder (the larger skirt)
-    const mainBody = BABYLON.MeshBuilder.CreateCylinder("mainBody", {
+    const body = BABYLON.MeshBuilder.CreateCylinder("body", {
       diameter: bodyRadius * 2,
       height: bodyHeight,
       tessellation: 64
     }, scene);
-    mainBody.rotation.x = Math.PI;
-    mainBody.position.y = -0.02;
-    mainBody.material = bodyMat;
+    body.rotation.x = Math.PI;
+    body.position.y = -0.02;
+    body.material = bodyMat;
+    body.parent = root;
 
-    // Bottom thin plate (flat face that mounts to surface) - slight inset to look realistic
+    // === LOWER CYLINDER (base) WITH FLAT CUT ===
+    const baseRadius = bodyRadius * 0.95;
+    const baseHeight = 0.09;
+
+    const baseFull = BABYLON.MeshBuilder.CreateCylinder("baseFull", {
+      diameter: baseRadius * 2,
+      height: baseHeight,
+      tessellation: 64
+    }, scene);
+    baseFull.rotation.x = Math.PI;
+    baseFull.position.y = -bodyHeight/2 - baseHeight/2 - 0.01;
+    baseFull.material = bodyMat;
+
+    // single sideCutBox (was duplicated before)
+    const sideCutBox = BABYLON.MeshBuilder.CreateBox("sideCut", {
+      width: baseRadius * 2.5,
+      height: baseHeight * 2,
+      depth: baseRadius * 2
+    }, scene);
+    sideCutBox.position = new BABYLON.Vector3(baseRadius * 0.8, 0, 0);
+    let baseCut;
+    try {
+      const baseCSG = BABYLON.CSG.FromMesh(baseFull);
+      const cutCSG = BABYLON.CSG.FromMesh(sideCutBox);
+      const result = baseCSG.subtract(cutCSG);
+      baseCut = result.toMesh("baseCut", bodyMat, scene);
+      baseFull.dispose();
+      sideCutBox.dispose();
+    } catch (e) {
+      console.warn("CSG failed for base, using full base");
+      baseCut = baseFull;
+      sideCutBox.dispose();
+    }
+    baseCut.parent = root;
+
+    // === BOTTOM PLATE ===
     const bottomPlate = BABYLON.MeshBuilder.CreateDisc("bottomPlate", {
-      radius: bodyRadius * 0.98,
+      radius: bodyRadius * 0.95,
       tessellation: 64
     }, scene);
     bottomPlate.rotation.x = Math.PI/2;
     bottomPlate.position.y = -bodyHeight/2 - 0.01;
-    bottomPlate.material = rimMat;
-
-    // Upper small cylinder (vented crown)
-    const crownRadius = bodyRadius * 0.5;
-    const crownHeight = 0.08;
-    const crown = BABYLON.MeshBuilder.CreateCylinder("crown", {
-      diameter: crownRadius * 2,
-      height: crownHeight,
-      tessellation: 64
-    }, scene);
-    crown.rotation.x = Math.PI;
-    crown.position.y = bodyHeight/2 + crownHeight/2 - 0.01;
-    crown.material = bodyMat;
-
-    // Top plate (flat top surface) — slightly inset ring to create recessed look
-    const topPlate = BABYLON.MeshBuilder.CreateDisc("topPlate", {
-      radius: crownRadius * 0.96,
-      tessellation: 64
-    }, scene);
-    topPlate.rotation.x = Math.PI/2;
-    topPlate.position.y = crown.position.y + crownHeight/2 - 0.001;
-    const topPlateMat = new BABYLON.StandardMaterial("topPlateMat", scene);
-    topPlateMat.diffuseColor = new BABYLON.Color3(0.985,0.985,0.985);
-    topPlateMat.specularColor = new BABYLON.Color3(0.2,0.2,0.2);
-    topPlate.material = topPlateMat;
-
-    // Create vertical vent slats around the crown by subtracting thin boxes (CSG)
-    const slatCount = 28; // number of vertical slats
-    const slatDepth = 0.04; // how deep slats cut into the crown
-    const slatWidth = 0.012;
-    const slatHeight = crownHeight * 1.05;
-    const slats = [];
-    for (let i = 0; i < slatCount; i++) {
-      const angle = (i / slatCount) * Math.PI * 2;
-      const x = Math.cos(angle) * (crownRadius * 0.98);
-      const z = Math.sin(angle) * (crownRadius * 0.98);
-      const slat = BABYLON.MeshBuilder.CreateBox("slat" + i, {
-        width: slatWidth,
-        height: slatHeight,
-        depth: slatDepth
-      }, scene);
-      slat.position = new BABYLON.Vector3(x, crown.position.y, z);
-      // Rotate so its face points to center
-      slat.rotation.y = -angle;
-      slats.push(slat);
-    }
-
-    // Subtract slats from crown to get grill
-    let crownWithVents = crown;
-    try {
-      let crownCSG = BABYLON.CSG.FromMesh(crown);
-      slats.forEach(s => {
-        crownCSG = crownCSG.subtract(BABYLON.CSG.FromMesh(s));
-      });
-      crownWithVents = crownCSG.toMesh("crownVented", bodyMat, scene);
-      crown.dispose();
-      slats.forEach(s => s.dispose());
-    } catch (e) {
-      console.warn("CSG for crown vents failed, leaving solid crown");
-      slats.forEach(s => s.dispose());
-    }
-
-    // Big center switch/button on top — large and clearly visible
-    const buttonRadius = crownRadius * 0.6;
-    const buttonHeight = 0.018;
-    const button = BABYLON.MeshBuilder.CreateCylinder("button", {
-      diameter: buttonRadius * 2,
-      height: buttonHeight,
-      tessellation: 48
-    }, scene);
-    // slightly raised above top plate (a 'pressable' looking button)
-    button.position.y = topPlate.position.y + 0.006;
-    button.material = buttonMat;
-    // add a thin rim around button for realism
-    const buttonRim = BABYLON.MeshBuilder.CreateTorus("butRim", {
-      diameter: (buttonRadius * 2) + 0.002,
-      thickness: 0.006,
-      tessellation: 32
-    }, scene);
-    buttonRim.rotation.x = Math.PI/2;
-    buttonRim.position = new BABYLON.Vector3(0, button.position.y - 0.006, 0);
-    const rimEdgeMat = new BABYLON.StandardMaterial("rimEdge", scene);
-    rimEdgeMat.diffuseColor = new BABYLON.Color3(0.92,0.92,0.92);
-    buttonRim.material = rimEdgeMat;
-
-    // Company name on top — use DynamicTexture painted onto a small top decal
-    const labelSize = 512;
-    const dynTex = new BABYLON.DynamicTexture("dynTex", {width: labelSize, height: labelSize}, scene, false);
-    const ctx = dynTex.getContext();
-    ctx.clearRect(0,0,labelSize,labelSize);
-    // background transparent
-    dynTex.drawText("Aura of", null, null, "bold 48px Arial", "rgba(30,30,30,0.95)", "transparent", true);
-    dynTex.drawText("Safety", null, 320, "bold 64px Arial", "rgba(30,30,30,0.95)", "transparent", true);
-    dynTex.update();
-    const labelMat = new BABYLON.StandardMaterial("labelMat", scene);
-    labelMat.diffuseTexture = dynTex;
-    labelMat.diffuseTexture.hasAlpha = true;
-    labelMat.specularColor = new BABYLON.Color3(0,0,0);
-
-    // A small plane slightly above the top plate to display label (centered, not interfering with button)
-    const labelPlane = BABYLON.MeshBuilder.CreatePlane("labelPlane", {width: crownRadius * 1.2, height: crownRadius * 0.5}, scene);
-    labelPlane.material = labelMat;
-    labelPlane.position = new BABYLON.Vector3(0, topPlate.position.y + 0.001, (crownRadius * 0.28)); // shift towards front so not overlapped by button
-    labelPlane.rotation.x = Math.PI/2;
-    // Slight tilt to feel more natural (optional)
-    labelPlane.rotation.z = 0.02;
-
-    // ===== Create lower cylinder with flat cut and two adjacent rectangular ports =====
-    // baseFull already created as mainBody; we will perform a CSG on a copy to carve flat side and ports.
-    // Create a dedicated base mesh for CSG so mainBody remains visually consistent.
-    const baseFull = BABYLON.MeshBuilder.CreateCylinder("baseFull", {
-      diameter: bodyRadius * 1.9, // a tiny bit larger so the visible body matches
-      height: bodyHeight * 0.98,
-      tessellation: 64
-    }, scene);
-    baseFull.rotation.x = Math.PI;
-    baseFull.position.y = mainBody.position.y;
-    baseFull.material = bodyMat;
-
-    // Define large cut box to produce flat face (on +X side)
-    const flatCut = BABYLON.MeshBuilder.CreateBox("flatCut", {
-      width: bodyRadius * 1.5,
-      height: bodyHeight * 2,
-      depth: bodyRadius * 2.2
-    }, scene);
-    flatCut.position = new BABYLON.Vector3(bodyRadius * 0.85, 0, 0);
-
-    // Define two adjacent port boxes (these will be subtracted to create openings).
-    const portW = 0.06; // width of port opening
-    const portH = 0.03;
-    const portD = 0.02; // depth of port hole
-
-    const portOffsetZ = 0.03; // lateral offset between the two ports
-    const portY = -0.03; // vertical position on base
-
-    const port1Box = BABYLON.MeshBuilder.CreateBox("port1Box", {
-      width: portW,
-      height: portH,
-      depth: portD
-    }, scene);
-    port1Box.position = new BABYLON.Vector3(bodyRadius * 0.82, portY, -portOffsetZ);
-
-    const port2Box = BABYLON.MeshBuilder.CreateBox("port2Box", {
-      width: portW,
-      height: portH,
-      depth: portD
-    }, scene);
-    port2Box.position = new BABYLON.Vector3(bodyRadius * 0.82, portY, portOffsetZ);
-
-    // Now perform CSG: baseFull - flatCut - port1Box - port2Box
-    let baseCSGmesh;
-    try {
-      let baseCSG = BABYLON.CSG.FromMesh(baseFull);
-      baseCSG = baseCSG.subtract(BABYLON.CSG.FromMesh(flatCut));
-      baseCSG = baseCSG.subtract(BABYLON.CSG.FromMesh(port1Box));
-      baseCSG = baseCSG.subtract(BABYLON.CSG.FromMesh(port2Box));
-      baseCSGmesh = baseCSG.toMesh("baseCutMesh", bodyMat, scene);
-      // dispose originals used for CSG
-      baseFull.dispose();
-      flatCut.dispose();
-      port1Box.dispose();
-      port2Box.dispose();
-    } catch (e) {
-      console.warn("CSG on base failed, using uncut base as fallback");
-      baseCSGmesh = baseFull;
-      flatCut.dispose();
-      port1Box.dispose();
-      port2Box.dispose();
-    }
-
-    // For visual clarity, create small inner port dark meshes to show depth (optional)
-    const innerPort1 = BABYLON.MeshBuilder.CreateBox("innerPort1", { width: portW * 0.9, height: portH * 0.9, depth: portD * 0.9 }, scene);
-    innerPort1.material = portMat;
-    innerPort1.position = new BABYLON.Vector3(bodyRadius * 0.82 - 0.005, portY, -portOffsetZ);
-
-    const innerPort2 = innerPort1.clone("innerPort2");
-    innerPort2.position = new BABYLON.Vector3(bodyRadius * 0.82 - 0.005, portY, portOffsetZ);
-
-    // Make sure inner ports are children of root and slightly inset (they emulate connectors)
-    innerPort1.parent = root;
-    innerPort2.parent = root;
-
-    // Attach all main parts to root for easy transform
-    mainBody.parent = root;
+    bottomPlate.material = bottomMat;
     bottomPlate.parent = root;
-    crownWithVents.parent = root;
-    topPlate.parent = root;
-    button.parent = root;
-    buttonRim.parent = root;
-    labelPlane.parent = root;
-    baseCSGmesh.parent = root;
 
-    // Remove duplicate visible overlapped mainBody area (we keep baseCSGmesh as final visible base)
-    // Hide the earlier mainBody mesh in favor of baseCSGmesh to avoid z-fighting:
-    mainBody.isVisible = false;
+    // === VENT BAND ===
+    const ventBand = BABYLON.MeshBuilder.CreateCylinder("ventBand", {
+      diameter: bodyRadius * 2 * 0.98,
+      height: 0.03,
+      tessellation: 64
+    }, scene);
+    ventBand.rotation.x = Math.PI;
+    ventBand.position.y = -bodyHeight/2 + 0.01;
+    ventBand.material = ventMat;
+    ventBand.parent = root;
 
-    // Position tweak for camera framing
-    root.scaling = new BABYLON.Vector3(1.0, 1.0, 1.0);
+    // === UPPER CYLINDER (topCap) ===
+    const topCapRadius = bodyRadius / 2;
+    const topCapHeight = 0.08;
 
-    // Auto-rotate for presentation
-    scene.onBeforeRenderObservable.add(() => {
-      const t = performance.now() * 0.00006;
+    const topCap = BABYLON.MeshBuilder.CreateCylinder("topCap", {
+      diameter: topCapRadius * 2,
+      height: topCapHeight,
+      tessellation: 64
+    }, scene);
+    topCap.rotation.x = Math.PI;
+    topCap.position.y = bodyHeight/2 + topCapHeight/2 - 0.01;
+    topCap.material = bodyMat;
+    
+    // DO NOT parent yet — we'll parent the final mesh after CSG
+
+    // === Side vent holes (to subtract) ===
+    const ventHoles = [];
+    const holeCount = 8;
+    for (let i = 0; i < holeCount; i++) {
+      const angle = (i / holeCount) * Math.PI * 2;
+      const hole = BABYLON.MeshBuilder.CreateBox("ventHole" + i, {
+        width: 0.01,
+        height: 0.03,
+        depth: 0.02
+      }, scene);
+      hole.position = new BABYLON.Vector3(
+        Math.cos(angle) * topCapRadius * 0.95,
+        topCap.position.y,
+        Math.sin(angle) * topCapRadius * 0.95
+      );
+      hole.rotation.y = -angle;
+      ventHoles.push(hole);
+    }
+
+    // === Create topCapWithVents via CSG, but only dispose originals if CSG succeeded ===
+    let topCapWithVents = topCap;
+    let csgSucceeded = false;
+    try {
+      let capCSG = BABYLON.CSG.FromMesh(topCap);
+      ventHoles.forEach(h => {
+        capCSG = capCSG.subtract(BABYLON.CSG.FromMesh(h));
+      });
+      topCapWithVents = capCSG.toMesh("topCapVented", bodyMat, scene);
+      csgSucceeded = true;
+    } catch (e) {
+      console.warn("CSG failed on top vents — using solid topCap");
+      csgSucceeded = false;
+    } finally {
+      // Clean up originals only if CSG succeeded (so we don't dispose the mesh we still need)
+      if (csgSucceeded) {
+        try { topCap.dispose(); } catch(e) {}
+        ventHoles.forEach(h => { try { h.dispose(); } catch(e) {} });
+      } else {
+        // If CSG failed, remove the vent hole helper meshes to avoid clutter
+        ventHoles.forEach(h => { try { h.dispose(); } catch(e) {} });
+      }
+    }
+
+    topCapWithVents.parent = root;
+
+    // === BLACK VERTICAL STRIPES ON TOP CYLINDER ===
+    // This block must be AFTER topCapWithVents/topCap is finalized and root exists.
+    (function addStripes() {
+      const stripeCount = 40;
+      const stripeWidth = 0.0005;
+      const stripeHeight = topCapHeight * 0.75;
+      // put stripes slightly outside to avoid z-fighting with top cap surface
+      const stripeRadius = topCapRadius * 1;
+
+      // safe reference to whichever mesh we have
+      const topCapMesh = topCapWithVents || topCap;
+      if (!topCapMesh || typeof topCapMesh.position === "undefined") {
+        console.warn("No top cap mesh available for stripes; skipping stripes.");
+        return;
+      }
+
+      for (let i = 0; i < stripeCount; i++) {
+        const angle = (i / stripeCount) * Math.PI * 2;
+        const stripe = BABYLON.MeshBuilder.CreateBox("stripe" + i, {
+          width: stripeWidth,
+          height: stripeHeight,
+          depth: 0.02
+        }, scene);
+
+        stripe.material = ventMat;
+
+        stripe.position = new BABYLON.Vector3(
+          Math.cos(angle) * stripeRadius,
+          topCapMesh.position.y,
+          Math.sin(angle) * stripeRadius
+        );
+
+        stripe.rotation.y = -angle;
+        stripe.parent = root;
+      }
+    })();
+
+
+
+    // === TEXT: "Aura of Safety" ON TOP SURFACE — visible plane, same color as top cylinder ===
+(function addTopSurfaceText(){
+
+    const textureSize = 1024;
+    const dynamicTexture = new BABYLON.DynamicTexture("topTextTexture", {width: textureSize, height: textureSize}, scene);
+    const ctx = dynamicTexture.getContext();
+
+    ctx.clearRect(0, 0, textureSize, textureSize);
+
+    // Крупный белый текст
+    ctx.font = "bold 140px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("Aura of Safety", textureSize / 2, textureSize / 2);
+
+    dynamicTexture.update();
+
+    // Материал под цвет верхнего цилиндра
+    const textMat = new BABYLON.StandardMaterial("topTextMat", scene);
+    textMat.diffuseTexture = dynamicTexture;
+    textMat.diffuseColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+    // ← цвет совпадает с верхней крышкой
+    textMat.emissiveColor = new BABYLON.Color3(1,1,1);    // ← текст яркий, самосветящийся
+    textMat.specularColor = new BABYLON.Color3(0.1,0.1,0.1);
+
+    // Уменьшенная плоскость
+    const textPlane = BABYLON.MeshBuilder.CreatePlane("topTextPlane", {
+        width: topCapRadius * 1.2,
+        height: topCapRadius * 1.2
+    }, scene);
+
+    // Позиция — верхняя плоскость цилиндра
+    textPlane.position = new BABYLON.Vector3(
+        0,
+        topCapWithVents.position.y + topCapHeight / 2 + 0.001,
+        0
+    );
+
+    textPlane.rotation.x = Math.PI / 2;
+    textPlane.material = textMat;
+    textPlane.parent = root;
+})();
+
+
+        // === TOP BUTTON (black sphere) ===
+    const buttonRadius = 0.015;
+
+    const topButton = BABYLON.MeshBuilder.CreateSphere("topButton", {
+    diameter: buttonRadius * 2,
+    segments: 32
+    }, scene);
+
+    // позиция: верхний край серединного цилиндра
+    topButton.position = new BABYLON.Vector3(
+    0, 
+    topButton.position.y = topCapWithVents.position.y + topCapHeight / 2 - buttonRadius - 0.08, 
+    0
+    );
+    topButton.position.x = topCapRadius * 1.7;
+    const buttonMat = new BABYLON.StandardMaterial("buttonMat", scene);
+    buttonMat.diffuseColor = new BABYLON.Color3(0.05, 0.05, 0.05);
+    buttonMat.specularColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+    topButton.material = buttonMat;
+
+    topButton.parent = root;
+
+
+
+
+
+    // === PORTS (on flat side of lower cylinder) ===
+    const usbWidth = 0.04, usbHeight = 0.01, usbDepth = 0.043;
+    const ethWidth = 0.05, ethHeight = 0.045  , ethDepth = 0.07;
+
+    const usbPort = BABYLON.MeshBuilder.CreateBox("usbPort", { width: usbWidth, height: usbHeight, depth: usbDepth }, scene);
+    const ethPort = BABYLON.MeshBuilder.CreateBox("ethPort", { width: ethWidth, height: ethHeight, depth: ethDepth }, scene);
+
+    usbPort.position = new BABYLON.Vector3(baseRadius - 0.778, -0.14, -0.02);
+    ethPort.position = new BABYLON.Vector3(baseRadius - 0.770, -0.14, 0.08);
+    usbPort.material = portMat;
+    ethPort.material = portMat;
+    usbPort.parent = root;
+    ethPort.parent = root;
+
+    // === AUTO ROTATION ===
+    scene.onBeforeRenderObservable.add(()=> {
+      const t = performance.now() * 0.00008;
       root.rotation.y = t;
     });
 
-    // Double-click reset camera
-    canvas.addEventListener("dblclick", () => {
-      cam.setTarget(BABYLON.Vector3.Zero());
-      cam.alpha = -Math.PI/2.6;
-      cam.beta = Math.PI/3.6;
-      cam.radius = 1.8;
-    });
-
-    // Simple hover interaction for the button (visual toggle simulation)
-    let pressed = false;
-    canvas.addEventListener("pointerdown", (evt) => {
-      const pick = scene.pick(scene.pointerX, scene.pointerY);
-      if (pick && pick.pickedMesh === button) {
-        pressed = !pressed;
-        // animate button press visually
-        const moveTo = pressed ? -0.006 : 0.006;
-        button.position.y = topPlate.position.y + moveTo;
-        // change button color to indicate state
-        if (pressed) button.material.albedoColor = new BABYLON.Color3(0.08,0.75,0.45); // green when "on"
-        else button.material.albedoColor = new BABYLON.Color3(0.12,0.55,0.95); // default bluish
-      }
+    // === DOUBLE CLICK RESET CAMERA ===
+    canvas.addEventListener("dblclick", ()=> {
+      camera.setTarget(BABYLON.Vector3.Zero());
+      camera.alpha = -Math.PI/2.8;
+      camera.beta = Math.PI/3.5;
+      camera.radius = 1.8;
     });
 
     return scene;
   };
 
   const scene = createScene();
-  engine.runRenderLoop(() => scene.render());
-  window.addEventListener("resize", () => engine.resize());
+  engine.runRenderLoop(()=> scene.render());
+
+  window.addEventListener("resize", ()=> engine.resize());
 </script>
 </body>
 </html>
-
