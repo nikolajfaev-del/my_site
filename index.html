@@ -1,145 +1,196 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>10 класс — Итоговые проекты</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 24px;
-      color: #2c3e50;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 500px;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 28px;
-      margin: 20px 0 30px;
-      color: #2980b9;
-      animation: fadeInDown 0.8s ease-out;
-    }
-
-    .card {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-      padding: 24px;
-      margin: 12px 0;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      animation: slideUp 0.6s ease-out forwards;
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    .card:nth-child(1) { animation-delay: 0.1s; }
-    .card:nth-child(2) { animation-delay: 0.2s; }
-    .card:nth-child(3) { animation-delay: 0.3s; }
-    .card:nth-child(4) { animation-delay: 0.4s; }
-    .card:nth-child(5) { animation-delay: 0.5s; }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-      background: #f8fbff;
-    }
-
-    .card h3 {
-      font-size: 18px;
-      margin-bottom: 8px;
-      color: #1a5276;
-    }
-
-    .card p {
-      font-size: 14px;
-      color: #5d8aa8;
-      line-height: 1.5;
-    }
-
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes slideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .footer {
-      margin-top: 30px;
-      font-size: 12px;
-      color: #7f8c8d;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura of Safety — Умное устройство для мониторинга помещений</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>🎯 Выбери тему итогового проекта</h1>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1 class="logo-title">AURA OF SAFETY</h1>
+                </div>
+                <nav class="nav">
+                    <a href="#about" class="nav-link">О продукте</a>
+                    <a href="#features" class="nav-link">Возможности</a>
+                    <a href="#how-it-works" class="nav-link">Как это работает</a>
+                    <a href="#contact" class="nav-link">Контакты</a>
+                    <a href="https://t.me/auraofsafety" target="_blank" class="btn btn-channel-header">
+                        <span class="channel-icon">📢</span>
+                        Подписаться на канал
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
 
-    <div class="card" onclick="sendProject('Бот-помощник по алгебре')">
-      <h3>📚 Бот-помощник по алгебре</h3>
-      <p>Помощь с формулами, решением задач и теорией для 10 класса.</p>
-    </div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h2 class="hero-title">Умный мониторинг помещений<br>без нарушения приватности</h2>
+                    <p class="hero-subtitle">Компактное потолочное устройство для контроля состояния помещения без камер и аудиозаписи</p>
+                    <div class="hero-buttons">
+                        <a href="3dmodel.html" class="btn btn-primary">Посмотреть 3D модель</a>
+                        <a href="#features" class="btn btn-secondary">Узнать больше</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="device-preview">
+                        <img src="photo/product_photo.png" alt="Aura of Safety устройство" class="device-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div class="card" onclick="sendProject('Поиск партнёра для командного проекта')">
-      <h3>👥 Поиск партнёра</h3>
-      <p>Найди одноклассника с похожими интересами для совместного проекта.</p>
-    </div>
+    <!-- About Section -->
+    <section id="about" class="section about">
+        <div class="container">
+            <h2 class="section-title">О продукте</h2>
+            <div class="about-content">
+                <p class="about-text">
+                    Мы создаём умное потолочное устройство — компактный мультисенсорный модуль, который без камер и аудиозаписи отслеживает состояние помещения и помогает владельцам квартир, управляющим компаниям и арендодателям контролировать, что происходит внутри помещения, не нарушая приватность жильцов.
+                </p>
+                <p class="about-text">
+                    Такое устройство может использоваться в сдаваемых квартирах, отелях, офисах, коттеджах и других помещениях, где важно понимать, что происходит, без видеонаблюдения.
+                </p>
+            </div>
+        </div>
+    </section>
 
-    <div class="card" onclick="sendProject('Трекер привычек с уведомлениями')">
-      <h3>📅 Трекер привычек</h3>
-      <p>Следи за своими привычками и получай напоминания в Telegram.</p>
-    </div>
 
-    <div class="card" onclick="sendProject('Сравнение цен в маркетплейсах')">
-      <h3>🛒 Сравнение цен</h3>
-      <p>Анализируй цены на товары и находи лучшие предложения.</p>
-    </div>
+    <!-- Features Section -->
+    <section id="features" class="section features">
+        <div class="container">
+            <h2 class="section-title">Основные функции</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔊</div>
+                    <h3 class="feature-title">Мониторинг шума</h3>
+                    <p class="feature-description">Определение уровня шума, уведомление владельца при превышении заданного звукового порога </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚭</div>
+                    <h3 class="feature-title">Обнаружение курения</h3>
+                    <p class="feature-description">Фиксация присутствия дыма, запаха табака и аэрозолей через VOC/CO₂ сенсоры</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌡</div>
+                    <h3 class="feature-title">Контроль климата</h3>
+                    <p class="feature-description"> Качество воздуха (CO₂, VOC, PM), вероятность появления плесени,температура, влажность</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👤</div>
+                    <h3 class="feature-title">Обнаружение движения</h3>
+                    <p class="feature-description">Фиксация присутствия людей через mmWave радар</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h3 class="feature-title">Режим сигнализации</h3>
+                    <p class="feature-description">Когда квартира пустует, устройство фиксирует движение и отправляет тревожные уведомления владельцу</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">Приватность</h3>
+                    <p class="feature-description">Полный контроль без камер и аудиозаписи — только данные с датчиков</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div class="card" onclick="sendProject('Словарь школьного сленга')">
-      <h3>📘 Словарь школьного сленга</h3>
-      <p>Собирай, объясняй и распространяй современный школьный жаргон.</p>
-    </div>
 
-    <div class="footer">
-      Mini App для 10 класса • roomcontrol.ru
-    </div>
-  </div>
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="section how-it-works">
+        <div class="container">
+            <h2 class="section-title">Как работает система</h2>
+            <div class="workflow">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Датчик</h3>
+                        <p class="step-description">
+                            Умное устройство постоянно собирает данные с сенсоров: шум, климат, движение, дым и т.д. Обработка и фильтрация данных происходит на микроконтроллере. Устройство передаёт информацию на сервер через Wi-Fi по протоколу MQTT.
+                        </p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Сервер</h3>
+                        <p class="step-description">
+                            Backend принимает данные от устройства, анализирует их и определяет события: «Обнаружено курение», «Повышенный уровень шума», «Сработало движение при включённой сигнализации», «Критически низкий уровень качества воздуха». Сервер также отвечает за хранение истории данных, авторизацию пользователей, управление устройствами и взаимодействие с клиентскими интерфейсами.
+                        </p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Мобильное приложение на IoS и Android</h3>
+                        <p class="step-description">
+                            Интерфейс, через который пользователь взаимодействует с системой. Пользователь регистрируется и привязывает устройство (по QR коду). В приложении отображаются текущие показатели (шум, температура, влажность, качество воздуха). Оно так же отправляет уведомления о событиях: шум, курение, движение, тревога. Через него можно управлять устройством — включать/выключать сигнализацию, менять режимы, запрашивать отчёты.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <script>
-    function sendProject(topic) {
-      Telegram.WebApp.sendData(topic);
-      Telegram.WebApp.close();
-    }
+    <!-- Goal Section -->
+    <section class="section goal">
+        <div class="container">
+            <h2 class="section-title">Цель проекта</h2>
+            <div class="goal-content">
+                <p class="goal-text">
+                    Создать полностью отечественное инновационное решение, разработанное специально для российского рынка. Наш продукт — это результат глубокого понимания локальных потребностей, созданный без зависимости от зарубежных технологий и ограничений. Мы фокусируемся на приватности, удобстве использования и полной интеграции с российскими системами "умного дома".
+                </p>
+                <p class="goal-text">
+                    На первом этапе наша задача — собрать и протестировать работающий прототип:
+                </p>
+                <ul class="goal-list">
+                    <li>Устройство, передающее реальные данные</li>
+                    <li>Сервер, принимающий и обрабатывающий их</li>
+                    <li>Бот, отображающий всё это в удобной форме для пользователя</li>
+                </ul>
+            </div>
+        </div>
+    </section>
 
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand(); // раскрыть на полный экран в Mini App
-  </script>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact">
+        <div class="container">
+            <h2 class="section-title">Свяжитесь с нами</h2>
+            <div class="contact-content">
+                <p class="contact-text">Интересует наш продукт? Хотите узнать больше или стать частью проекта?</p>
+                <div class="contact-buttons">
+                    <a href="https://t.me/auraofsafety_support" target="_blank" class="btn btn-telegram">
+                        <span class="telegram-icon">✈️</span>
+                        Написать в Telegram
+                    </a>
+                    <a href="https://t.me/auraofsafety" target="_blank" class="btn btn-channel">
+                        <span class="channel-icon">📢</span>
+                        Подписаться на канал
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Aura of Safety. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
