@@ -1,22 +1,136 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Итоговые проекты — 10 класс</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>10 класс — Итоговые проекты</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
-    button { display: block; width: 100%; padding: 12px; margin: 8px 0; font-size: 16px; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      color: #2c3e50;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 20px 0 30px;
+      color: #2980b9;
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      padding: 24px;
+      margin: 12px 0;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      animation: slideUp 0.6s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+    .card:nth-child(4) { animation-delay: 0.4s; }
+    .card:nth-child(5) { animation-delay: 0.5s; }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+      background: #f8fbff;
+    }
+
+    .card h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: #1a5276;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #5d8aa8;
+      line-height: 1.5;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .footer {
+      margin-top: 30px;
+      font-size: 12px;
+      color: #7f8c8d;
+    }
   </style>
 </head>
 <body>
-  <h2>Выберите тему для итогового проекта:</h2>
-  <button onclick="sendProject('Бот-помощник по алгебре')">Бот-помощник по алгебре</button>
-  <button onclick="sendProject('Поиск партнёра для командного проекта')">Поиск партнёра для командного проекта</button>
-  <button onclick="sendProject('Трекер привычек с уведомлениями')">Трекер привычек</button>
-  <button onclick="sendProject('Сравнение цен в маркетплейсах')">Сравнение цен</button>
-  <button onclick="sendProject('Словарь школьного сленга')">Словарь школьного сленга</button>
+  <div class="container">
+    <h1>🎯 Выбери тему итогового проекта</h1>
+
+    <div class="card" onclick="sendProject('Бот-помощник по алгебре')">
+      <h3>📚 Бот-помощник по алгебре</h3>
+      <p>Помощь с формулами, решением задач и теорией для 10 класса.</p>
+    </div>
+
+    <div class="card" onclick="sendProject('Поиск партнёра для командного проекта')">
+      <h3>👥 Поиск партнёра</h3>
+      <p>Найди одноклассника с похожими интересами для совместного проекта.</p>
+    </div>
+
+    <div class="card" onclick="sendProject('Трекер привычек с уведомлениями')">
+      <h3>📅 Трекер привычек</h3>
+      <p>Следи за своими привычками и получай напоминания в Telegram.</p>
+    </div>
+
+    <div class="card" onclick="sendProject('Сравнение цен в маркетплейсах')">
+      <h3>🛒 Сравнение цен</h3>
+      <p>Анализируй цены на товары и находи лучшие предложения.</p>
+    </div>
+
+    <div class="card" onclick="sendProject('Словарь школьного сленга')">
+      <h3>📘 Словарь школьного сленга</h3>
+      <p>Собирай, объясняй и распространяй современный школьный жаргон.</p>
+    </div>
+
+    <div class="footer">
+      Mini App для 10 класса • roomcontrol.ru
+    </div>
+  </div>
 
   <script>
     function sendProject(topic) {
@@ -25,6 +139,7 @@
     }
 
     Telegram.WebApp.ready();
+    Telegram.WebApp.expand(); // раскрыть на полный экран в Mini App
   </script>
 </body>
 </html>
