@@ -6,35 +6,47 @@
 }
 
 :root {
-    --primary-color: #2563eb;
-    --primary-dark: #1e40af;
-    --primary-light: #3b82f6;
-    --secondary-color: #60a5fa;
-    --accent-color: #93c5fd;
-    --text-primary: #f1f5f9;
-    --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
-    --bg-primary: #1e293b;
-    --bg-secondary: #354e71;
-    --bg-accent: #475569;
-    --bg-card: #3d547b;
-    --bg-card-hover: #374151;
-    --border-color: #475569;
-    --gradient-primary: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
-    --gradient-hero: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    /* Единый бело-голубой фон */
+    --bg-gradient: linear-gradient(135deg, #ffffff 0%, #e0f2fe 50%, #bae6fd 100%);
+
+    /* Текст — весь чёрный, включая заголовки */
+    --text-primary: #000000;     /* основной текст */
+    --text-secondary: #000000;   /* вспомогательный */
+    --text-muted: #000000;       /* подписи */
+    --heading-color: #000000;    /* заголовки */
+
+    /* Кнопки */
+    --button-bg: #6b7280;        /* серый фон */
+    --button-text: #ffffff;      /* белый текст */
+
+    /* Элементы интерфейса */
+    --border-color: #cbd5e1;
+    --bg-card: #f8fafc;
+    --bg-card-hover: #e2e8f0;
+
+    /* Акцентные цвета */
+    --primary-color: #0ea5e9;
+    --primary-light: #38bdf8;
+    --primary-dark: #0284c7;
+
+    /* Тени */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.12);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.15);
+    --shadow-xl: 0 20px 25px rgba(0,0,0,0.2);
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
     color: var(--text-primary);
-    background-color: var(--bg-primary);
+    background: var(--bg-gradient);
     overflow-x: hidden;
     min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6, p{
+    color: var(--heading-color);
 }
 
 @media (max-width: 768px) {
@@ -53,20 +65,18 @@ body {
 
 /* Header */
 .header {
-    background: rgba(30, 41, 59, 0.8);
-    backdrop-filter: blur(20px);
-    box-shadow: var(--shadow-md);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid rgba(71, 85, 105, 0.3);
-    transition: all 0.3s ease;
+    background: white;              /* белый фон */
+    color: #000000;                     /* черный текст */
+    padding: 10px 20px;                 /* делает header более сжатым */
+    margin: 15px auto;                  /* отступы сверху/снизу */
+    width: calc(100% - 30px);           /* чтобы были видны закругления */
+    border-radius: 15px;                /* закругленные края */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.header:hover {
-    background: rgba(30, 41, 59, 0.95);
-    box-shadow: var(--shadow-lg);
-}
 
 .header-content {
     display: flex;
@@ -134,7 +144,7 @@ body {
 /* Hero Section */
 .hero {
     padding: 6rem 0;
-    background: var(--gradient-hero);
+    background: var(--bg-gradient);
     color: white;
     position: relative;
     overflow: hidden;
@@ -370,6 +380,7 @@ body {
 /* Section Styles */
 .section {
     padding: 5rem 0;
+    background: var(--bg-gradient);
 }
 
 .section-title {
@@ -377,10 +388,10 @@ body {
     font-weight: 800;
     text-align: center;
     margin-bottom: 3rem;
-    color: var(--text-primary);
+    color: var(--heading-color);
     letter-spacing: -0.5px;
     animation: fadeInUp 0.6s ease-out;
-    background: var(--gradient-primary);
+    background: var(--heading-color);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -388,7 +399,7 @@ body {
 
 /* About Section */
 .about {
-    background: var(--bg-secondary);
+    background: var(--bg-gradient);
     color: var(--text-primary);
 }
 
@@ -485,7 +496,7 @@ body {
 
 /* How It Works Section */
 .how-it-works {
-    background: var(--bg-secondary);
+    background: var(--bg-gradient);
     color: var(--text-primary);
 }
 
@@ -561,8 +572,9 @@ body {
 
 /* Goal Section */
 .goal {
-    background: var(--bg-accent);
+    background: var(--bg-gradient);
     color: var(--text-primary);
+    
 }
 
 .goal-content {
@@ -609,7 +621,7 @@ body {
 
 /* Contact Section */
 .contact {
-    background: var(--bg-secondary);
+    background: var(--bg-gradient);
     color: var(--text-primary);
 }
 
